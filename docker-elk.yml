@@ -1,0 +1,24 @@
+version: '2'
+services:
+  elk:
+    image: sebp/elk:611
+    ports:
+      - "5601:5601"
+      - "9200:9200"
+      - "5044:5044"
+    volumes:
+      - ./elk-tls:/etc/pki/tls/
+      - ./elk-data:/var/lib/elasticsearch
+      - ./conf.d/02-beats-input.conf:/etc/logstash/conf.d/02-beats-input.conf
+    networks:
+      app_net:
+        ipv4_address: 172.16.0.33
+
+networks:
+  app_net:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+      - subnet: 172.16.0.0/24
+        gateway: 172.16.0.2
